@@ -84,7 +84,19 @@ export default function RadioInterface() {
   };
   return (
     <div className="h-full flex items-center justify-center p-4">
-      <VaultDoorEffect isOpen={isOn}>
+      <VaultDoorEffect
+        isOpen={isOn}
+        powerButton={
+          <div className="flex justify-center">
+            <RadioButton
+              label="POWER"
+              isActive={isOn}
+              onClick={handlePowerToggle}
+              variant="power"
+            />
+          </div>
+        }
+      >
         <div className="relative">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -145,12 +157,6 @@ export default function RadioInterface() {
               </div>
 
               <div className="flex space-x-4 justify-center">
-                <RadioButton
-                  label="POWER"
-                  isActive={isOn}
-                  onClick={handlePowerToggle}
-                  variant="power"
-                />
                 <RadioButton
                   label="SCAN"
                   isActive={false}
