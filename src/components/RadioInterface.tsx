@@ -83,7 +83,7 @@ export default function RadioInterface() {
     setTimeout(() => setStaticLevel(30), 1000);
   };
   return (
-    <div className="h-full flex items-center justify-center p-4">
+    <div className="h-screen w-screen overflow-hidden">
       <VaultDoorEffect
         isOpen={isOn}
         powerButton={
@@ -97,118 +97,126 @@ export default function RadioInterface() {
           </div>
         }
       >
-        <div className="relative">
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="bg-gradient-to-b from-vault-rust to-vault-dark p-8 rounded-lg border-2 border-primary relative overflow-hidden shadow-fallout-border"
-            style={{ width: "800px", height: "500px" }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-20 animate-crt-flicker pointer-events-none" />
+        <div className="h-screen w-screen grid grid-rows-3 grid-cols-3 gap-4 p-4">
+          <div className="col-span-3 bg-gradient-to-r from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-4 flex items-center justify-between shadow-fallout-border">
+            <div className="text-primary font-fallout text-2xl font-bold glow-text">
+              VAULTWAVE FM RADIO TERMINAL
+            </div>
+            <div className="text-right">
+              <div className="text-primary font-fallout text-sm glow-text">
+                <div className="font-bold">VAULT-TEC MODEL VT-2077</div>
+                <div className="text-xs opacity-80">OPERATIONAL</div>
+              </div>
+            </div>
+          </div>
 
-            <div className="absolute left-4 top-4 bottom-4 w-32 bg-vault-dark rounded-lg border-2 border-primary/60 shadow-amber-glow">
-              <div className="p-2 h-full">
+          <div className="bg-vault-dark rounded-lg border-2 border-primary/60 shadow-amber-glow p-4">
+            <div className="h-full flex flex-col">
+              <div className="text-primary font-fallout text-xs mb-2 glow-text text-center">
+                SPEAKER
+              </div>
+              <div className="flex-1 space-y-2">
                 {Array.from({ length: 20 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-4 bg-primary/20 mb-1 rounded-sm opacity-60 glow-text"
+                    className="h-3 bg-primary/20 rounded-sm opacity-60"
                   />
                 ))}
               </div>
             </div>
+          </div>
 
-            <div className="ml-40 space-y-6">
-              <RadioDisplay
-                isOn={isOn}
-                station={stations[currentStation]}
-                staticLevel={staticLevel}
-              />
+          <div className="bg-gradient-to-b from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-6 shadow-fallout-border relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-20 animate-crt-flicker pointer-events-none" />
+            <RadioDisplay
+              isOn={isOn}
+              station={stations[currentStation]}
+              staticLevel={staticLevel}
+            />
+          </div>
 
-              <div className="flex space-x-12 justify-center">
-                <div className="text-center">
-                  <RadioKnob
-                    value={volume}
-                    onChange={handleVolumeChange}
-                    min={0}
-                    max={100}
-                    size={80}
-                    color="amber"
-                  />
-                  <p className="text-primary text-xs mt-2 font-fallout glow-text">
-                    VOLUME
-                  </p>
-                </div>
-
-                <div className="text-center">
-                  <RadioKnob
-                    value={currentStation * 20}
-                    onChange={() => {}}
-                    min={0}
-                    max={100}
-                    size={80}
-                    color="green"
-                    onDirectionChange={handleStationChange}
-                  />
-                  <p className="text-vault-green text-xs mt-2 font-fallout glow-text">
-                    TUNING
-                  </p>
-                </div>
+          {/* Middle Right - Control Knobs */}
+          <div className="bg-gradient-to-b from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-6 shadow-fallout-border">
+            <div className="h-full flex flex-col justify-center space-y-8">
+              <div className="text-center">
+                <RadioKnob
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  min={0}
+                  max={100}
+                  size={70}
+                  color="amber"
+                />
+                <p className="text-primary text-xs mt-2 font-fallout glow-text">
+                  VOLUME
+                </p>
               </div>
 
-              <div className="flex space-x-4 justify-center">
-                <RadioButton
-                  label="SCAN"
-                  isActive={false}
-                  onClick={() => {}}
-                  variant="function"
+              <div className="text-center">
+                <RadioKnob
+                  value={currentStation * 20}
+                  onChange={() => {}}
+                  min={0}
+                  max={100}
+                  size={70}
+                  color="green"
+                  onDirectionChange={handleStationChange}
                 />
-                <RadioButton
-                  label="EMERGENCY"
-                  isActive={false}
-                  onClick={() => {}}
-                  variant="emergency"
-                />
+                <p className="text-vault-green text-xs mt-2 font-fallout glow-text">
+                  TUNING
+                </p>
               </div>
             </div>
+          </div>
 
-            <div className="absolute bottom-4 right-4">
-              <div className="text-primary font-fallout text-sm glow-text">
-                <div className="font-bold">VAULT-TEC</div>
-                <div className="text-xs opacity-80">Model VT-2077</div>
+          <div className="bg-gradient-to-b from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-4 shadow-fallout-border flex items-center justify-center">
+            <div className="space-y-4">
+              <RadioButton
+                label="SCAN"
+                isActive={false}
+                onClick={() => {}}
+                variant="function"
+              />
+              <RadioButton
+                label="EMERGENCY"
+                isActive={false}
+                onClick={() => {}}
+                variant="emergency"
+              />
+            </div>
+          </div>
+
+          <div className="col-span-2">
+            <TerminalOutput isOn={isOn} currentNews={newsItems[newsIndex]} />
+          </div>
+        </div>
+
+        {isOn && staticLevel > 60 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="absolute top-4 right-4 bg-tertiary/20 border-2 border-tertiary rounded-lg p-4 radiation-warning z-10"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="w-6 h-6 border-2 border-tertiary rounded-full flex items-center justify-center">
+                <div className="text-tertiary font-fallout text-xs font-bold">
+                  ⚠
+                </div>
+              </div>
+              <div className="font-fallout text-tertiary font-bold">
+                RADIATION INTERFERENCE
               </div>
             </div>
           </motion.div>
-          <TerminalOutput isOn={isOn} currentNews={newsItems[newsIndex]} />
-          {isOn && staticLevel > 60 && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="mt-4 bg-tertiary/20 border-2 border-tertiary rounded-lg p-4 radiation-warning"
-            >
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 border-2 border-tertiary rounded-full flex items-center justify-center">
-                  <div className="text-tertiary font-fallout text-xs font-bold">
-                    ⚠
-                  </div>
-                </div>
-                <div className="font-fallout text-tertiary font-bold">
-                  RADIATION INTERFERENCE DETECTED
-                </div>
-              </div>
-              <div className="mt-2 text-xs font-fallout text-tertiary/80">
-                Signal degradation in progress. Adjusting frequency...
-              </div>
-            </motion.div>
-          )}{" "}
-          <AudioManager
-            isOn={isOn}
-            volume={volume}
-            currentStation={currentStation}
-            staticLevel={staticLevel}
-          />
-        </div>
+        )}
+
+        <AudioManager
+          isOn={isOn}
+          volume={volume}
+          currentStation={currentStation}
+          staticLevel={staticLevel}
+        />
       </VaultDoorEffect>
     </div>
   );

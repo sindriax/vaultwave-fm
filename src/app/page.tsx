@@ -2,7 +2,7 @@ import RadioInterface from "@/components/RadioInterface";
 
 export default function Home() {
   return (
-    <div className="retro-container scanline-effect old-crt-monitor">
+    <div className="min-h-screen min-w-screen flex flex-col retro-container scanline-effect old-crt-monitor">
       <header className="flex gap-8 items-center p-4 enhanced-scanlines">
         <h1 className="text-2xl font-fallout holographic phosphor-trail">
           VAULTWAVE FM
