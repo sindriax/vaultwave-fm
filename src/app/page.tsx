@@ -3,32 +3,6 @@ import RadioInterface from "@/components/RadioInterface";
 export default function Home() {
   return (
     <div className="min-h-screen min-w-screen flex flex-col retro-container scanline-effect old-crt-monitor">
-      <header className="flex gap-8 items-center p-4 enhanced-scanlines">
-        <h1 className="text-2xl font-fallout holographic phosphor-trail">
-          VAULTWAVE FM
-        </h1>
-        <nav role="navigation">
-          <ul className="flex gap-6">
-            <li>
-              <a
-                href="#radio"
-                className="font-fallout text-lg hover:text-vault-orange transition-colors glow-text"
-              >
-                RADIO
-              </a>
-            </li>
-            <li>
-              <a
-                href="#terminal"
-                className="font-fallout text-lg hover:text-vault-orange transition-colors glow-text"
-              >
-                TERMINAL
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </header>
-
       <main id="radio" className="overflow-hidden">
         <RadioInterface />
       </main>

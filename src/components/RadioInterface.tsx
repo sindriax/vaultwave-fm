@@ -97,96 +97,68 @@ export default function RadioInterface() {
           </div>
         }
       >
-        <div className="h-screen w-screen grid grid-rows-3 grid-cols-3 gap-4 p-4">
-          <div className="col-span-3 bg-gradient-to-r from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-4 flex items-center justify-between shadow-fallout-border">
-            <div className="text-primary font-fallout text-2xl font-bold glow-text">
+        <div className="h-screen w-screen grid grid-rows-[auto_3fr_auto] gap-6 p-4">
+          <div className="bg-gradient-to-r from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-4 flex items-center justify-between shadow-fallout-border">
+            <div className="texts-primary font-fallout text-2xl font-bold glow-text">
               VAULTWAVE FM RADIO TERMINAL
             </div>
-            <div className="text-right">
-              <div className="text-primary font-fallout text-sm glow-text">
-                <div className="font-bold">VAULT-TEC MODEL VT-2077</div>
-                <div className="text-xs opacity-80">OPERATIONAL</div>
-              </div>
-            </div>
-          </div>
 
-          <div className="bg-vault-dark rounded-lg border-2 border-primary/60 shadow-amber-glow p-4">
-            <div className="h-full flex flex-col">
-              <div className="text-primary font-fallout text-xs mb-2 glow-text text-center">
-                SPEAKER
-              </div>
-              <div className="flex-1 space-y-2">
-                {Array.from({ length: 20 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-3 bg-primary/20 rounded-sm opacity-60"
+            <div className="flex items-center space-x-8">
+              <div className="text-center">
+                <div className="flex items-center space-x-3 mb-1">
+                  <RadioKnob
+                    value={volume}
+                    onChange={handleVolumeChange}
+                    min={0}
+                    max={100}
+                    size={60}
+                    color="amber"
+                    showValue={false}
                   />
-                ))}
+                  <span className="text-primary text-lg font-fallout font-bold glow-text min-w-[3ch]">
+                    {volume}
+                  </span>
+                </div>
+                <p className="text-primary text-xs font-fallout glow-text">
+                  VOL
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="flex items-center space-x-3 mb-1">
+                  <RadioKnob
+                    value={currentStation * 20}
+                    onChange={() => {}}
+                    min={0}
+                    max={100}
+                    size={60}
+                    color="green"
+                    onDirectionChange={handleStationChange}
+                    showValue={false}
+                  />
+                  <span className="text-vault-green text-lg font-fallout font-bold glow-text min-w-[4ch]">
+                    {stations[currentStation].frequency}
+                  </span>
+                </div>
+                <p className="text-vault-green text-xs font-fallout glow-text">
+                  TUNE
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-b from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-6 shadow-fallout-border relative overflow-hidden">
+          <div className="bg-gradient-to-b from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-8 shadow-fallout-border relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-20 animate-crt-flicker pointer-events-none" />
-            <RadioDisplay
-              isOn={isOn}
-              station={stations[currentStation]}
-              staticLevel={staticLevel}
-            />
-          </div>
-
-          {/* Middle Right - Control Knobs */}
-          <div className="bg-gradient-to-b from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-6 shadow-fallout-border">
-            <div className="h-full flex flex-col justify-center space-y-8">
-              <div className="text-center">
-                <RadioKnob
-                  value={volume}
-                  onChange={handleVolumeChange}
-                  min={0}
-                  max={100}
-                  size={70}
-                  color="amber"
-                />
-                <p className="text-primary text-xs mt-2 font-fallout glow-text">
-                  VOLUME
-                </p>
-              </div>
-
-              <div className="text-center">
-                <RadioKnob
-                  value={currentStation * 20}
-                  onChange={() => {}}
-                  min={0}
-                  max={100}
-                  size={70}
-                  color="green"
-                  onDirectionChange={handleStationChange}
-                />
-                <p className="text-vault-green text-xs mt-2 font-fallout glow-text">
-                  TUNING
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-b from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-4 shadow-fallout-border flex items-center justify-center">
-            <div className="space-y-4">
-              <RadioButton
-                label="SCAN"
-                isActive={false}
-                onClick={() => {}}
-                variant="function"
-              />
-              <RadioButton
-                label="EMERGENCY"
-                isActive={false}
-                onClick={() => {}}
-                variant="emergency"
+            <div className="relative z-10 h-full">
+              <RadioDisplay
+                isOn={isOn}
+                station={stations[currentStation]}
+                staticLevel={staticLevel}
               />
             </div>
           </div>
 
-          <div className="col-span-2">
+          <div>
             <TerminalOutput isOn={isOn} currentNews={newsItems[newsIndex]} />
           </div>
         </div>
