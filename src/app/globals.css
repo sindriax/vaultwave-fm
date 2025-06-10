@@ -1,26 +1,402 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;700&display=swap");
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  font-family: "VT323", monospace;
+  font-weight: 400;
+  --primary-color: #ffd52c;
+  --secondary-color: #ff5c00;
+  --tertiary-color: #c72d04;
+  --background-color: #111;
+  --vault-amber: #ffd52c;
+  --vault-orange: #ff5c00;
+  --vault-red: #c72d04;
+  --vault-green: #00ff00;
+  --vault-rust: #8b4513;
+  --terminal-green: #00ff41;
+  scrollbar-color: var(--primary-color) var(--secondary-color);
+  font-size: clamp(18px, 3vw, 30px);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  font-family: "VT323", monospace;
+  overflow-x: hidden;
+  cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23ffd52c" fill-opacity="0.1"/><rect x="14" y="14" width="4" height="4" fill="%23ffd52c"/></svg>'),
+    auto;
+}
+
+/* Retro Container with Fallout styling */
+.retro-container {
+  width: 90vw;
+  height: 90vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+  padding: 0.5rem;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  mask-image: linear-gradient(to bottom, #0005 50%, #000 50%);
+  mask-size: 100% 2px;
+  text-shadow: 0 0 0.5rem;
+  background-color: var(--background-color);
+}
+
+/* CRT Screen Effects */
+.crt-effect {
+  position: relative;
+}
+
+.crt-effect::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 213, 44, 0.03) 2px,
+    rgba(255, 213, 44, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Old CRT Monitor Effect */
+@keyframes crtAnimation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 10000%;
+  }
+}
+
+.old-crt-monitor {
+  box-shadow: inset 0px 0px 2rem var(--primary-color);
+  background-image: linear-gradient(
+    0deg,
+    #0000 10%,
+    rgba(255, 213, 44, 0.1) 90%,
+    #0000 100%
+  );
+  animation: crtAnimation 100s linear infinite;
+  background-size: 100% 80%;
+}
+
+/* Enhanced Scanlines Effect */
+.scanline-effect {
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 50%, #000 50%);
+  mask-size: 100% 2px;
+}
+
+/* Retro Button Styles */
+.retro-button {
+  position: relative;
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  font-family: "VT323", monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 0.5rem;
+  box-shadow: 0 0 0.5rem rgba(255, 213, 44, 0.3);
+}
+
+.retro-button:hover {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+  box-shadow: 0 0 1rem rgba(255, 92, 0, 0.5);
+  text-shadow: 0 0 1rem;
+}
+
+.retro-button:active {
+  background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+  color: var(--tertiary-color);
+}
+
+/* Glowing Text */
+.glow-text {
+  text-shadow: 0 0 0.5rem currentColor, 0 0 1rem currentColor,
+    0 0 1.5rem currentColor;
+}
+
+/* Alert Animation */
+.alert {
+  animation: blink-bg 1s ease-out infinite;
+}
+
+@keyframes blink-bg {
+  0%,
+  60% {
+    text-shadow: 0 0 0.5rem;
+    color: var(--primary-color);
+  }
+  70%,
+  100% {
+    text-shadow: 0 0 1.5rem;
+    color: var(--tertiary-color);
+  }
+}
+
+/* Radio Knob Styles */
+.radio-knob {
+  background: radial-gradient(circle at 30% 30%, #666, #333);
+  border: 2px solid #888;
+  position: relative;
+}
+
+.radio-knob::after {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 2px;
+  height: 20%;
+  background: #fff;
+  transform: translateX(-50%);
+  border-radius: 1px;
+}
+
+/* Terminal Styles */
+.terminal {
+  background: rgba(17, 17, 17, 0.95);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 1rem rgba(255, 213, 44, 0.5),
+    inset 0 0 1rem rgba(255, 213, 44, 0.1);
+  font-family: "VT323", monospace;
+  color: var(--primary-color);
+  text-shadow: 0 0 0.5rem;
+}
+
+/* Static Animation */
+@keyframes static-noise {
+  0% {
+    transform: translateX(0px) translateY(0px);
+  }
+  10% {
+    transform: translateX(-1px) translateY(-1px);
+  }
+  20% {
+    transform: translateX(1px) translateY(1px);
+  }
+  30% {
+    transform: translateX(-1px) translateY(1px);
+  }
+  40% {
+    transform: translateX(1px) translateY(-1px);
+  }
+  50% {
+    transform: translateX(-1px) translateY(-1px);
+  }
+  60% {
+    transform: translateX(1px) translateY(1px);
+  }
+  70% {
+    transform: translateX(-1px) translateY(1px);
+  }
+  80% {
+    transform: translateX(1px) translateY(-1px);
+  }
+  90% {
+    transform: translateX(-1px) translateY(-1px);
+  }
+  100% {
+    transform: translateX(0px) translateY(0px);
+  }
+}
+
+.static-animation {
+  animation: static-noise 0.1s infinite linear;
+}
+
+/* Screen flicker */
+@keyframes screen-flicker {
+  0% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 0.97;
+  }
+  99% {
+    opacity: 0.99;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.screen-flicker {
+  animation: screen-flicker 0.15s infinite linear;
+}
+
+/* Additional Fallout-style effects */
+
+/* Phosphor Trail Effect for Text */
+.phosphor-trail {
+  text-shadow: 0 0 0.5rem currentColor, 0 0 1rem currentColor,
+    0 0 1.5rem currentColor, 0 0 2rem currentColor;
+  transition: text-shadow 0.3s ease;
+}
+
+/* Enhanced Terminal Glow */
+.terminal-glow {
+  box-shadow: 0 0 1rem rgba(255, 213, 44, 0.3),
+    inset 0 0 1rem rgba(255, 213, 44, 0.1), 0 0 0 1px rgba(255, 213, 44, 0.2);
+}
+
+/* Radiation Warning Animation */
+@keyframes radiation-pulse {
+  0%,
+  50% {
+    text-shadow: 0 0 0.5rem;
+    color: var(--tertiary-color);
+    opacity: 1;
+  }
+  25%,
+  75% {
+    text-shadow: 0 0 2rem;
+    color: var(--secondary-color);
+    opacity: 0.8;
+  }
+}
+
+.radiation-warning {
+  animation: radiation-pulse 2s ease-in-out infinite;
+}
+
+/* Enhanced Scanline Effect with Movement */
+@keyframes scanline-scroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 10px;
+  }
+}
+
+.enhanced-scanlines {
+  background-image: linear-gradient(
+      0deg,
+      transparent 40%,
+      rgba(255, 213, 44, 0.05) 50%,
+      transparent 60%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 40%,
+      rgba(255, 213, 44, 0.02) 50%,
+      transparent 60%
+    );
+  background-size: 100% 4px, 4px 100%;
+  animation: scanline-scroll 20s linear infinite;
+}
+
+/* Vault Door Animation */
+@keyframes vault-door-open {
+  0% {
+    clip-path: circle(0% at 50% 50%);
+    opacity: 0;
+  }
+  50% {
+    clip-path: circle(50% at 50% 50%);
+    opacity: 0.8;
+  }
+  100% {
+    clip-path: circle(100% at 50% 50%);
+    opacity: 1;
+  }
+}
+
+.vault-door-animation {
+  animation: vault-door-open 2s ease-out;
+}
+
+/* Radio Static Effect */
+@keyframes radio-static {
+  0% {
+    opacity: 0.8;
+    transform: translateX(0px) skew(0deg);
+  }
+  10% {
+    opacity: 0.4;
+    transform: translateX(-2px) skew(-1deg);
+  }
+  20% {
+    opacity: 0.9;
+    transform: translateX(2px) skew(1deg);
+  }
+  30% {
+    opacity: 0.3;
+    transform: translateX(-1px) skew(-0.5deg);
+  }
+  40% {
+    opacity: 0.7;
+    transform: translateX(1px) skew(0.5deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(-3px) skew(-1.5deg);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateX(3px) skew(1.5deg);
+  }
+  70% {
+    opacity: 0.2;
+    transform: translateX(-1px) skew(-0.5deg);
+  }
+  80% {
+    opacity: 0.9;
+    transform: translateX(2px) skew(1deg);
+  }
+  90% {
+    opacity: 0.4;
+    transform: translateX(-2px) skew(-1deg);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translateX(0px) skew(0deg);
+  }
+}
+
+.radio-static {
+  animation: radio-static 0.2s infinite linear;
+}
+
+/* Holographic Text Effect */
+.holographic {
+  background: linear-gradient(
+    45deg,
+    var(--primary-color),
+    var(--secondary-color),
+    var(--primary-color)
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: holographic-shift 3s ease-in-out infinite;
+}
+
+@keyframes holographic-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
