@@ -66,25 +66,25 @@ export default function RadioInterface() {
           </div>
         }
       >
-        <div className="h-screen w-screen grid grid-rows-[auto_3fr_auto] gap-6 p-4">
-          <div className="bg-gradient-to-r from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-4 flex items-center justify-between shadow-fallout-border">
-            <div className="texts-primary font-fallout text-2xl font-bold glow-text">
+        <div className="h-screen w-screen grid grid-rows-[auto_1fr]">
+          <div className="bg-gradient-to-r from-vault-rust to-vault-dark border-b-2 border-primary p-2 flex items-center justify-between shadow-fallout-border">
+            <div className="texts-primary font-fallout text-xl font-bold glow-text">
               VAULTWAVE FM RADIO TERMINAL
             </div>
 
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-6">
               <div className="text-center">
-                <div className="flex items-center space-x-3 mb-1">
+                <div className="flex items-center space-x-2 mb-1">
                   <RadioKnob
                     value={volume}
                     onChange={handleVolumeChange}
                     min={0}
                     max={100}
-                    size={60}
+                    size={50}
                     color="amber"
                     showValue={false}
                   />
-                  <span className="text-primary text-lg font-fallout font-bold glow-text min-w-[3ch]">
+                  <span className="text-primary text-md font-fallout font-bold glow-text min-w-[3ch]">
                     {volume}
                   </span>
                 </div>
@@ -94,18 +94,18 @@ export default function RadioInterface() {
               </div>
 
               <div className="text-center">
-                <div className="flex items-center space-x-3 mb-1">
+                <div className="flex items-center space-x-2 mb-1">
                   <RadioKnob
                     value={currentStation * 20}
                     onChange={() => {}}
                     min={0}
                     max={100}
-                    size={60}
+                    size={50}
                     color="green"
                     onDirectionChange={handleStationChange}
                     showValue={false}
                   />
-                  <span className="text-vault-green text-lg font-fallout font-bold glow-text min-w-[4ch]">
+                  <span className="text-vault-green text-md font-fallout font-bold glow-text min-w-[4ch]">
                     {radioStations[currentStation].frequency}
                   </span>
                 </div>
@@ -116,19 +116,20 @@ export default function RadioInterface() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-b from-vault-rust to-vault-dark border-2 border-primary rounded-lg p-8 shadow-fallout-border relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-20 animate-crt-flicker pointer-events-none" />
-            <div className="relative z-10 h-full">
+          <div className="flex h-full w-full">
+            <div className="w-1/2 p-4">
               <RadioDisplay
                 isOn={isOn}
                 station={radioStations[currentStation]}
                 staticLevel={staticLevel}
               />
             </div>
-          </div>
 
-          <div>
-            <TerminalOutput isOn={isOn} currentNews={newsItems[newsIndex]} />
+            <div className="w-px bg-primary/40 shadow-glow flex-shrink-0"></div>
+
+            <div className="w-1/2 p-4">
+              <TerminalOutput isOn={isOn} currentNews={newsItems[newsIndex]} />
+            </div>
           </div>
         </div>
 

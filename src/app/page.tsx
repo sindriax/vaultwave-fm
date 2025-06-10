@@ -7,7 +7,7 @@ export default function Home() {
         <RadioInterface />
       </main>
 
-      <footer className="flex justify-between items-center p-4 text-sm font-fallout border-t border-primary/20">
+      <footer className="flex justify-between items-center p-1 text-sm font-fallout border-t border-primary/20">
         <p className="glow-text">© 2287 VAULT-TEC CORPORATION</p>
         <div className="flex items-center space-x-4">
           <div className="w-2 h-2 bg-vault-green rounded-full animate-pulse"></div>

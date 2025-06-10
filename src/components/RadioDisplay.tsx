@@ -2,17 +2,11 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-
-interface Station {
-  id: number;
-  name: string;
-  frequency: string;
-  genre: string;
-}
+import { RadioStation } from "../data/stations";
 
 interface RadioDisplayProps {
   isOn: boolean;
-  station: Station;
+  station: RadioStation;
   staticLevel: number;
 }
 
@@ -22,7 +16,6 @@ export default function RadioDisplay({
   staticLevel,
 }: RadioDisplayProps) {
   const [displayText, setDisplayText] = useState("");
-  const [showCursor, setShowCursor] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -52,47 +45,54 @@ export default function RadioDisplay({
       } else {
         clearInterval(typeInterval);
       }
-    }, 100);
+    }, 80);
 
     return () => clearInterval(typeInterval);
   }, [isOn, station.name]);
 
-  useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 500);
-
-    return () => clearInterval(cursorInterval);
-  }, []);
-
   const generateStatic = () => {
     const chars = "▓▒░█▌▐│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌";
     return Array.from(
-      { length: 20 },
+      { length: 15 },
       () => chars[Math.floor(Math.random() * chars.length)]
     ).join("");
   };
 
-  const staticOpacity = staticLevel / 100;
+  const staticOpacity = Math.min(staticLevel / 100, 0.6);
 
   return (
-    <div className="relative bg-vault-dark border-2 border-primary p-8 rounded-lg shadow-crt font-fallout h-full">
-      <div className="absolute inset-0 bg-gradient-radial from-transparent via-primary/5 to-primary/20 rounded-lg pointer-events-none" />
+    <div className="relative bg-vault-dark/20 font-fallout h-full overflow-hidden">
+      {/* CRT Screen Effect */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent via-primary/5 to-primary/20 pointer-events-none" />
 
+      {/* Scanlines */}
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-30 animate-crt-flicker pointer-events-none"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 176, 0, 0.03) 2px, rgba(255, 176, 0, 0.03) 4px)",
+        }}
+      />
+
+      {/* Static Interference */}
       <AnimatePresence>
-        {isOn && staticLevel > 20 && (
+        {isOn && staticLevel > 25 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: staticOpacity }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 text-primary font-fallout text-xs overflow-hidden rounded-lg"
+            className="absolute inset-0 text-primary/60 font-fallout text-xs overflow-hidden z-10"
           >
-            {Array.from({ length: 10 }).map((_, i) => (
+            {Array.from({ length: 8 }).map((_, i) => (
               <motion.div
                 key={i}
-                animate={{ x: [0, -100, 0] }}
-                transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
-                className="whitespace-nowrap"
+                animate={{ x: [0, -200, 0] }}
+                transition={{
+                  duration: 0.3 + Math.random() * 0.4,
+                  repeat: Infinity,
+                  delay: i * 0.05,
+                }}
+                className="whitespace-nowrap opacity-40"
               >
                 {generateStatic()}
               </motion.div>
@@ -101,97 +101,56 @@ export default function RadioDisplay({
         )}
       </AnimatePresence>
 
-      <div className="relative z-10 space-y-6 h-full flex flex-col">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <motion.div
-              className={`w-3 h-3 rounded-full ${
-                isOn ? "bg-vault-green shadow-green-glow" : "bg-gray-600"
-              }`}
-              animate={isOn ? { opacity: [1, 0.5, 1] } : { opacity: 0.3 }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-            <span
-              className={`text-xs font-fallout glow-text ${
-                isOn ? "text-vault-green" : "text-gray-600"
-              }`}
-            >
-              PWR
-            </span>
-          </div>
-
-          {/* Current Time */}
-          <div
-            className={`text-xs font-fallout glow-text ${
-              isOn ? "text-primary" : "text-gray-600"
-            }`}
-          >
-            {isOn
-              ? currentTime.toLocaleTimeString("en-US", {
-                  hour12: false,
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              : "--:--"}
-          </div>
-        </div>
-
-        <div className="h-20 flex items-center justify-center bg-vault-dark/50 border border-primary/30 rounded p-4">
+      <div className="relative z-20 p-8 h-full flex flex-col justify-between space-y-4">
+        <div className="text-center space-y-4">
           <AnimatePresence mode="wait">
             {isOn ? (
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="space-y-3"
               >
-                <div className="text-primary font-fallout text-2xl font-bold glow-text">
+                <div className="text-primary font-fallout text-2xl font-bold glow-text tracking-wider">
                   {displayText}
-                  {showCursor && displayText.length < station.name.length && (
-                    <span className="text-secondary animate-pulse">█</span>
+                  {displayText.length < station.name.length && (
+                    <motion.span
+                      className="text-vault-green"
+                      animate={{ opacity: [1, 0, 1] }}
+                      transition={{ duration: 0.8, repeat: Infinity }}
+                    >
+                      █
+                    </motion.span>
                   )}
+                </div>
+
+                <div className="text-vault-green font-fallout text-5xl font-bold glow-text">
+                  {station.frequency}
+                </div>
+
+                <div className="text-secondary font-fallout text-lg tracking-wide">
+                  {station.genre}
                 </div>
               </motion.div>
             ) : (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-gray-600 font-fallout text-2xl text-center"
+                className="space-y-4"
               >
-                SYSTEM OFFLINE
+                <div className="text-gray-600 font-fallout text-3xl font-bold">
+                  VAULTWAVE FM
+                </div>
+                <div className="text-gray-500 font-fallout text-lg">
+                  SYSTEM OFFLINE
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
-          <div className="bg-vault-dark/30 border border-primary/20 rounded p-4">
-            <div className="text-sm font-fallout text-primary/60 mb-2">
-              FREQUENCY
-            </div>
-            <div
-              className={`text-lg font-fallout font-bold glow-text ${
-                isOn ? "text-primary" : "text-gray-600"
-              }`}
-            >
-              {isOn ? station.frequency : "---.-"} FM
-            </div>
-          </div>
-          <div className="bg-vault-dark/30 border border-primary/20 rounded p-4">
-            <div className="text-sm font-fallout text-primary/60 mb-2">
-              GENRE
-            </div>
-            <div
-              className={`text-lg font-fallout glow-text ${
-                isOn ? "text-vault-green" : "text-gray-600"
-              }`}
-            >
-              {isOn ? station.genre : "N/A"}
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-vault-dark/30 border border-primary/20 rounded p-4 flex-1">
+        <div className="bg-vault-dark/30 border border-primary/20 rounded p-4">
           <div className="flex justify-between items-center mb-4">
             <span className="text-sm font-fallout text-primary/60">
               SIGNAL STRENGTH
@@ -250,7 +209,7 @@ export default function RadioDisplay({
         </div>
 
         <div className="bg-vault-dark/50 border border-primary/30 rounded p-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-3">
             <div
               className={`text-sm font-fallout glow-text ${
                 isOn ? "text-primary/70" : "text-gray-600"
@@ -264,18 +223,22 @@ export default function RadioDisplay({
             </div>
 
             <div
-              className={`text-sm font-fallout glow-text ${
+              className={`text-xs font-fallout glow-text ${
                 isOn ? "text-primary/60" : "text-gray-600"
               }`}
             >
               {isOn
-                ? `VAULT TIME: ${currentTime.toLocaleDateString("en-US")}`
-                : "DATE: UNKNOWN"}
+                ? currentTime.toLocaleTimeString("en-US", {
+                    hour12: false,
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "--:--"}
             </div>
           </div>
 
           {isOn && (
-            <div className="flex space-x-6 mt-4 text-sm font-fallout">
+            <div className="flex space-x-6 text-sm font-fallout">
               <div className="flex items-center space-x-2">
                 <motion.div
                   className="w-3 h-3 bg-vault-green rounded-full"
@@ -291,6 +254,22 @@ export default function RadioDisplay({
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
                 <span className="text-primary glow-text">BROADCASTING</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <motion.div
+                  className={`w-3 h-3 rounded-full ${
+                    staticLevel > 50 ? "bg-tertiary" : "bg-vault-green"
+                  }`}
+                  animate={{ opacity: [1, 0.3, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                />
+                <span
+                  className={`glow-text ${
+                    staticLevel > 50 ? "text-tertiary" : "text-vault-green"
+                  }`}
+                >
+                  {staticLevel > 50 ? "STATIC" : "CLEAR"}
+                </span>
               </div>
             </div>
           )}
