@@ -8,39 +8,8 @@ import TerminalOutput from "./TerminalOutput";
 import RadioButton from "./RadioButton";
 import AudioManager from "./AudioManager";
 import VaultDoorEffect from "./VaultDoorEffect";
-
-const stations = [
-  {
-    id: 1,
-    name: "VAULT-TEC RADIO",
-    frequency: "101.5",
-    genre: "Classical/Orchestral",
-  },
-  {
-    id: 2,
-    name: "DIAMOND CITY RADIO",
-    frequency: "102.1",
-    genre: "Jazz & Swing",
-  },
-  { id: 3, name: "RADIO NEW VEGAS", frequency: "103.7", genre: "50s Oldies" },
-  {
-    id: 4,
-    name: "WASTELAND WAVES",
-    frequency: "104.3",
-    genre: "Lo-Fi Ambient",
-  },
-  { id: 5, name: "ATOMIC RADIO", frequency: "105.9", genre: "Post-War Blues" },
-];
-
-const newsItems = [
-  "VAULT-TEC SYSTEMS OPERATIONAL... ALL GREEN",
-  "RADIATION LEVELS NOMINAL IN SECTOR 7",
-  "WATER PURIFICATION SYSTEM: 98% EFFICIENCY",
-  "TEMPERATURE CONTROLS FUNCTIONING NORMALLY",
-  "BROTHERHOOD PATROL SPOTTED NEAR SECTOR 12",
-  "SUPPLY DROP SCHEDULED FOR 1400 HOURS",
-  "PERIMETER DEFENSES ACTIVE AND MONITORING",
-];
+import { radioStations } from "../data/stations";
+import { newsItems } from "../data/news";
 
 export default function RadioInterface() {
   const [isOn, setIsOn] = useState(false);
@@ -73,10 +42,10 @@ export default function RadioInterface() {
 
   const handleStationChange = (direction: "up" | "down") => {
     if (direction === "up") {
-      setCurrentStation((prev) => (prev + 1) % stations.length);
+      setCurrentStation((prev) => (prev + 1) % radioStations.length);
     } else {
       setCurrentStation(
-        (prev) => (prev - 1 + stations.length) % stations.length
+        (prev) => (prev - 1 + radioStations.length) % radioStations.length
       );
     }
     setStaticLevel(60);
@@ -137,7 +106,7 @@ export default function RadioInterface() {
                     showValue={false}
                   />
                   <span className="text-vault-green text-lg font-fallout font-bold glow-text min-w-[4ch]">
-                    {stations[currentStation].frequency}
+                    {radioStations[currentStation].frequency}
                   </span>
                 </div>
                 <p className="text-vault-green text-xs font-fallout glow-text">
@@ -152,7 +121,7 @@ export default function RadioInterface() {
             <div className="relative z-10 h-full">
               <RadioDisplay
                 isOn={isOn}
-                station={stations[currentStation]}
+                station={radioStations[currentStation]}
                 staticLevel={staticLevel}
               />
             </div>
@@ -188,6 +157,7 @@ export default function RadioInterface() {
           volume={volume}
           currentStation={currentStation}
           staticLevel={staticLevel}
+          stations={radioStations}
         />
       </VaultDoorEffect>
     </div>
