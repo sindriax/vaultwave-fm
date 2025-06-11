@@ -26,6 +26,7 @@ export default function AudioManager({
   const staticGainRef = useRef<GainNode | null>(null);
   const musicGainRef = useRef<GainNode | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const staticRampTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (isOn && !isInitialized) {
@@ -178,8 +179,18 @@ export default function AudioManager({
   }, [currentStation, isOn, isInitialized, loadAndPlayMusic]);
 
   useEffect(() => {
-    if (isOn && staticLevel > 50) {
-      setTimeout(() => {
+    if (staticRampTimeoutRef.current) {
+      clearTimeout(staticRampTimeoutRef.current);
+      staticRampTimeoutRef.current = null;
+    }
+
+    if (
+      isOn &&
+      staticLevel > 50 &&
+      audioContextRef.current &&
+      staticGainRef.current
+    ) {
+      staticRampTimeoutRef.current = setTimeout(() => {
         if (staticGainRef.current && audioContextRef.current) {
           staticGainRef.current.gain.setValueAtTime(
             0.3,
@@ -190,9 +201,17 @@ export default function AudioManager({
             audioContextRef.current.currentTime + 0.5
           );
         }
+        staticRampTimeoutRef.current = null;
       }, 100);
     }
-  }, [currentStation, isOn, staticLevel]);
+
+    return () => {
+      if (staticRampTimeoutRef.current) {
+        clearTimeout(staticRampTimeoutRef.current);
+        staticRampTimeoutRef.current = null;
+      }
+    };
+  }, [currentStation, isOn, staticLevel, isInitialized]); // Added isInitialized to ensure context is ready
 
   useEffect(() => {
     return () => {
