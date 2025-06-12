@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface TerminalOutputProps {
   isOn: boolean;
@@ -15,6 +15,7 @@ export default function TerminalOutput({
   const [terminalHistory, setTerminalHistory] = useState<string[]>([]);
   const [currentLine, setCurrentLine] = useState("");
   const [cursorVisible, setCursorVisible] = useState(true);
+  const bootSequenceTimeouts = useRef<NodeJS.Timeout[]>([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,6 +28,8 @@ export default function TerminalOutput({
     if (!isOn) {
       setTerminalHistory([]);
       setCurrentLine("");
+      bootSequenceTimeouts.current.forEach(clearTimeout);
+      bootSequenceTimeouts.current = [];
       return;
     }
 
@@ -55,12 +58,20 @@ export default function TerminalOutput({
         "MONITORING WASTELAND FREQUENCIES...",
       ];
 
+      bootSequenceTimeouts.current.forEach(clearTimeout);
+      bootSequenceTimeouts.current = [];
+
       bootSequence.forEach((line, index) => {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           setTerminalHistory((prev) => [...prev, `[BOOT] ${line}`]);
         }, index * 1000);
+        bootSequenceTimeouts.current.push(timeoutId);
       });
     }
+    return () => {
+      bootSequenceTimeouts.current.forEach(clearTimeout);
+      bootSequenceTimeouts.current = [];
+    };
   }, [isOn, terminalHistory.length]);
 
   if (!isOn) {
@@ -68,7 +79,7 @@ export default function TerminalOutput({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 0.5, y: 0 }}
-        className="bg-vault-dark border-2 border-gray-700 rounded-lg p-4 h-full font-fallout text-sm flex items-center justify-center"
+        className="bg-vault-dark border-2 border-gray-700 rounded-lg p-2 sm:p-3 h-full font-fallout text-xs sm:text-sm flex items-center justify-center"
       >
         <div className="text-gray-600 text-center">TERMINAL OFFLINE</div>
       </motion.div>
@@ -79,16 +90,16 @@ export default function TerminalOutput({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-vault-dark border-2 border-primary rounded-lg p-4 h-full font-fallout text-sm overflow-hidden relative scanline-effect flex flex-col"
+      className="bg-vault-dark border-2 border-primary rounded-lg p-2 sm:p-3 h-full font-fallout text-xs sm:text-sm overflow-hidden relative scanline-effect flex flex-col"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent animate-crt-flicker pointer-events-none" />
 
       <div className="relative z-10 flex flex-col h-full">
-        <div className="text-primary mb-2 glow-text">
+        <div className="text-primary mb-1 sm:mb-2 glow-text text-xs sm:text-sm">
           VAULT-TEC TERMINAL v2.1.7
         </div>
-        <div className="text-primary/80 mb-4">
-          ================================
+        <div className="text-primary/80 mb-2 sm:mb-4 text-xs">
+          ==================
         </div>
 
         <div className="flex-1 overflow-y-auto">
@@ -99,7 +110,7 @@ export default function TerminalOutput({
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-primary/80 mb-1 leading-tight glow-text"
+                className="text-primary/80 mb-0.5 leading-tight glow-text text-xs"
               >
                 {line}
               </motion.div>
