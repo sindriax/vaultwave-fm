@@ -66,33 +66,33 @@ export const radioStations: RadioStation[] = [
   //   },
 ];
 
-export const alternativeStations: RadioStation[] = [
-  {
-    id: 6,
-    name: "ENCLAVE RADIO",
-    frequency: "106.5",
-    genre: "Patriotic/Military",
-    audioUrl: "https://stream.zeno.fm/patriotic-stream",
-    description: "America's finest military marches and anthems",
-  },
-  {
-    id: 7,
-    name: "GALAXY NEWS RADIO",
-    frequency: "107.1",
-    genre: "Talk Radio",
-    audioUrl: "https://stream.zeno.fm/talk-radio",
-    description: "Fighting the good fight with music and news",
-  },
-];
+// export const alternativeStations: RadioStation[] = [
+//   {
+//     id: 6,
+//     name: "ENCLAVE RADIO",
+//     frequency: "106.5",
+//     genre: "Patriotic/Military",
+//     audioUrl: "https://stream.zeno.fm/patriotic-stream",
+//     description: "America's finest military marches and anthems",
+//   },
+//   {
+//     id: 7,
+//     name: "GALAXY NEWS RADIO",
+//     frequency: "107.1",
+//     genre: "Talk Radio",
+//     audioUrl: "https://stream.zeno.fm/talk-radio",
+//     description: "Fighting the good fight with music and news",
+//   },
+// ];
 
-export const emergencyStation: RadioStation = {
-  id: 0,
-  name: "EMERGENCY BROADCAST",
-  frequency: "000.0",
-  genre: "Emergency",
-  audioUrl: "",
-  description: "Emergency Broadcast System - Please Stand By",
-};
+// export const emergencyStation: RadioStation = {
+//   id: 0,
+//   name: "EMERGENCY BROADCAST",
+//   frequency: "000.0",
+//   genre: "Emergency",
+//   audioUrl: "",
+//   description: "Emergency Broadcast System - Please Stand By",
+// };
 
 export const getStationById = (id: number): RadioStation | undefined => {
   return radioStations.find((station) => station.id === id);
