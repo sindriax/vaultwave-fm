@@ -73,6 +73,7 @@ export default function VaultRadio() {
   return (
     <div className="pip-boy-container">
       <div className="pip-boy-screen">
+        <div className="radioactive-scanline"></div>
         <div className="pip-boy-header">
           <div className="pip-boy-title">VAULTWAVE FM - RADIO</div>
           <div className="pip-boy-status">[OPERATIONAL]</div>
