@@ -10,6 +10,7 @@ export default function VaultRadio() {
   const [volume, setVolume] = useState(50);
   const [currentNews, setCurrentNews] = useState<string>(newsItems[0]);
   const [newsType, setNewsType] = useState<'normal' | 'emergency' | 'special'>('normal');
+  const [waveformData, setWaveformData] = useState<number[]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
 
 
@@ -36,6 +37,18 @@ export default function VaultRadio() {
     const interval = setInterval(getRandomNews, newsConfig.rotationInterval);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const generateWaveform = () => {
+      const data = Array.from({ length: 32 }, () =>
+        isPlaying ? Math.random() * 80 + 10 : Math.random() * 20 + 5
+      );
+      setWaveformData(data);
+    };
+
+    const interval = setInterval(generateWaveform, isPlaying ? 100 : 500);
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
   const handlePlayPause = () => {
     if (audioRef.current) {
@@ -86,7 +99,39 @@ export default function VaultRadio() {
               </div>
 
               <div className="pip-boy-section">
-                <div className="section-title">&gt; CURRENT BROADCAST</div>
+                <div className="section-title">&gt; SIGNAL ANALYSIS</div>
+                <div className="waveform-container">
+                  <div className="waveform-display">
+                    {waveformData.map((height, index) => (
+                      <div
+                        key={index}
+                        className="waveform-bar"
+                        style={{
+                          height: `${height}%`,
+                          opacity: isPlaying ? 1 : 0.3,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <div className="signal-info">
+                    <div className="signal-row">
+                      <span className="signal-label">SIGNAL STRENGTH:</span>
+                      <span className="signal-value strong">STRONG</span>
+                    </div>
+                    <div className="signal-row">
+                      <span className="signal-label">INTERFERENCE:</span>
+                      <span className="signal-value minimal">MINIMAL</span>
+                    </div>
+                    <div className="signal-row">
+                      <span className="signal-label">QUALITY:</span>
+                      <span className="signal-value excellent">EXCELLENT</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pip-boy-section">
+                <div className="section-title">&gt; BROADCAST INFO</div>
                 <div className="current-station">
                   <div className="info-row">
                     <span className="label">STATION:</span>
@@ -108,7 +153,7 @@ export default function VaultRadio() {
               </div>
 
               <div className="pip-boy-section">
-                <div className="section-title">&gt; CONTROLS</div>
+                <div className="section-title">&gt; AUDIO CONTROLS</div>
                 <div className="controls">
                   <button className="pip-boy-button" onClick={handlePlayPause}>
                     [{isPlaying ? 'STOP BROADCAST' : 'START BROADCAST'}]
@@ -124,8 +169,19 @@ export default function VaultRadio() {
                       className="pip-boy-slider"
                     />
                   </div>
+                  <div className="audio-stats">
+                    <div className="stat-row">
+                      <span className="stat-dot operational"></span>
+                      <span>AUDIO DRIVER: ONLINE</span>
+                    </div>
+                    <div className="stat-row">
+                      <span className="stat-dot optimal"></span>
+                      <span>BUFFER: OPTIMAL</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
 
