@@ -3,6 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { radioStations, type RadioStation } from '@/data/stations';
 import { newsItems, emergencyNews, specialAnnouncements, newsConfig } from '@/data/news';
+import StationList from './StationList';
+import WaveformVisualizer from './WaveformVisualizer';
+import BroadcastInfo from './BroadcastInfo';
+import AudioControls from './AudioControls';
+import NewsTerminal from './NewsTerminal';
 
 export default function VaultRadio() {
   const [currentStation, setCurrentStation] = useState<RadioStation>(radioStations[0]);
@@ -10,7 +15,6 @@ export default function VaultRadio() {
   const [volume, setVolume] = useState(50);
   const [currentNews, setCurrentNews] = useState<string>(newsItems[0]);
   const [newsType, setNewsType] = useState<'normal' | 'emergency' | 'special'>('normal');
-  const [waveformData, setWaveformData] = useState<number[]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
 
 
@@ -38,17 +42,6 @@ export default function VaultRadio() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const generateWaveform = () => {
-      const data = Array.from({ length: 32 }, () =>
-        isPlaying ? Math.random() * 80 + 10 : Math.random() * 20 + 5
-      );
-      setWaveformData(data);
-    };
-
-    const interval = setInterval(generateWaveform, isPlaying ? 100 : 500);
-    return () => clearInterval(interval);
-  }, [isPlaying]);
 
   const handlePlayPause = () => {
     if (audioRef.current) {
@@ -82,154 +75,26 @@ export default function VaultRadio() {
         <div className="pip-boy-content">
           <div className="radio-section">
             <div className="radio-grid">
-              <div className="pip-boy-section">
-                <div className="section-title">&gt; AVAILABLE FREQUENCIES</div>
-                <div className="station-list">
-                  {radioStations.map((station) => (
-                    <div
-                      key={station.id}
-                      className={`station-row ${currentStation.id === station.id ? 'selected' : ''}`}
-                      onClick={() => handleStationChange(station)}
-                    >
-                      <span className="station-bullet">■</span>
-                      <span className="station-name">{station.name}</span>
-                      <span className="station-freq">{station.frequency} MHz</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <StationList
+                stations={radioStations}
+                currentStation={currentStation}
+                onStationChange={handleStationChange}
+              />
 
-              <div className="pip-boy-section">
-                <div className="section-title">&gt; SIGNAL ANALYSIS</div>
-                <div className="waveform-container">
-                  <div className="waveform-display">
-                    {waveformData.map((height, index) => (
-                      <div
-                        key={index}
-                        className="waveform-bar"
-                        style={{
-                          height: `${height}%`,
-                          opacity: isPlaying ? 1 : 0.3,
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <div className="signal-info">
-                    <div className="signal-row">
-                      <span className="signal-label">SIGNAL STRENGTH:</span>
-                      <span className="signal-value strong">STRONG</span>
-                    </div>
-                    <div className="signal-row">
-                      <span className="signal-label">INTERFERENCE:</span>
-                      <span className="signal-value minimal">MINIMAL</span>
-                    </div>
-                    <div className="signal-row">
-                      <span className="signal-label">QUALITY:</span>
-                      <span className="signal-value excellent">EXCELLENT</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <WaveformVisualizer isPlaying={isPlaying} />
 
-              <div className="pip-boy-section">
-                <div className="section-title">&gt; BROADCAST INFO</div>
-                <div className="current-station">
-                  <div className="info-row">
-                    <span className="label">STATION:</span>
-                    <span className="value">{currentStation.name}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="label">FREQUENCY:</span>
-                    <span className="value">{currentStation.frequency} MHz</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="label">GENRE:</span>
-                    <span className="value">{currentStation.genre}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="label">STATUS:</span>
-                    <span className="value">{isPlaying ? 'BROADCASTING' : 'STANDBY'}</span>
-                  </div>
-                </div>
-              </div>
+              <BroadcastInfo station={currentStation} isPlaying={isPlaying} />
 
-              <div className="pip-boy-section">
-                <div className="section-title">&gt; AUDIO CONTROLS</div>
-                <div className="controls">
-                  <button className="pip-boy-button" onClick={handlePlayPause}>
-                    [{isPlaying ? 'STOP BROADCAST' : 'START BROADCAST'}]
-                  </button>
-                  <div className="volume-control">
-                    <span className="label">VOLUME: {volume}%</span>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={volume}
-                      onChange={(e) => setVolume(parseInt(e.target.value))}
-                      className="pip-boy-slider"
-                    />
-                  </div>
-                  <div className="audio-stats">
-                    <div className="stat-row">
-                      <span className="stat-dot operational"></span>
-                      <span>AUDIO DRIVER: ONLINE</span>
-                    </div>
-                    <div className="stat-row">
-                      <span className="stat-dot optimal"></span>
-                      <span>BUFFER: OPTIMAL</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              <AudioControls
+                isPlaying={isPlaying}
+                volume={volume}
+                onPlayPause={handlePlayPause}
+                onVolumeChange={setVolume}
+              />
             </div>
           </div>
 
-          <div className="pip-boy-section news-terminal">
-            <div className="section-title">&gt; VAULT-TEC NETWORK FEED</div>
-            <div className="news-and-status">
-              <div className="news-display">
-                <div className="news-header">
-                  <span className="news-timestamp">{new Date().toLocaleTimeString()}</span>
-                  <span className={`news-priority ${newsType}`}>
-                    {newsType === 'emergency' ? '⚠ ALERT' : newsType === 'special' ? '📻 SPECIAL' : '📊 INFO'}
-                  </span>
-                </div>
-                <div className={`news-content ${newsType}`}>
-                  {currentNews}
-                </div>
-                <div className="news-footer">
-                  <div className="signal-indicator">
-                    <span className="signal-dot"></span>
-                    <span className="signal-dot"></span>
-                    <span className="signal-dot"></span>
-                    LIVE FEED
-                  </div>
-                </div>
-              </div>
-              <div className="vault-status">
-                <div className="status-grid">
-                  <div className="status-item">
-                    <span className="status-label">VAULT STATUS:</span>
-                    <span className="status-value operational">OPERATIONAL</span>
-                  </div>
-                  <div className="status-item">
-                    <span className="status-label">POPULATION:</span>
-                    <span className="status-value">847 DWELLERS</span>
-                  </div>
-                  <div className="status-item">
-                    <span className="status-label">SECURITY LEVEL:</span>
-                    <span className="status-value secure">SECURE</span>
-                  </div>
-                  <div className="status-item">
-                    <span className="status-label">AIR QUALITY:</span>
-                    <span className="status-value optimal">OPTIMAL</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <NewsTerminal currentNews={currentNews} newsType={newsType} />
         </div>
       </div>
 
