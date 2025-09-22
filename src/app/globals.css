@@ -33,6 +33,11 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 .pipboy-device {
@@ -816,7 +821,6 @@ input[type="range"]::-moz-range-thumb {
   min-height: calc(100vh - 160px);
 }
 
-/* News and Status Section */
 .news-and-status {
   display: flex;
   gap: 1.5rem;
@@ -1332,22 +1336,37 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @media (max-width: 768px) {
+  .pip-boy-container {
+    padding: 0;
+    margin: 0;
+  }
+
   .pip-boy-screen {
-    width: 95vw;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .pip-boy-header {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
   }
 
   .pip-boy-title {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+  }
+
+  .pip-boy-status {
+    font-size: 0.8rem;
   }
 
   .pip-boy-content {
     padding: 1rem;
     gap: 1rem;
-  }
-
-  .news-and-status {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    height: calc(100vh - 140px);
   }
 
   .radio-grid {
@@ -1355,10 +1374,234 @@ input[type="range"]::-moz-range-thumb {
     gap: 1rem;
   }
 
+  .radio-section {
+    margin-top: 0;
+  }
+
+  .pip-boy-section {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .station-list {
+    padding: 0.75rem;
+  }
+
   .station-row {
+    padding: 0.75rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
+  }
+
+  .station-name {
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+
+  .station-freq {
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+
+  .current-station {
+    padding: 0.75rem;
+  }
+
+  .info-row {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.25rem;
+    padding: 0.5rem 0;
+  }
+
+  .value {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .controls {
+    padding: 0.75rem;
+  }
+
+  .pip-boy-button {
+    padding: 1rem 1.25rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pip-boy-slider {
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .pip-boy-slider::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .pip-boy-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .waveform-container {
+    padding: 0.75rem;
+  }
+
+  .waveform-display {
+    height: 60px;
+    margin-bottom: 0.75rem;
+  }
+
+  .signal-info {
     gap: 0.5rem;
+  }
+
+  .news-terminal {
+    margin-top: 0;
+  }
+
+  .news-display {
+    padding: 0.75rem;
+    min-height: 120px;
+  }
+
+  .news-content {
+    font-size: 0.95rem;
+    line-height: 1.3;
+    min-height: 2.5rem;
+  }
+
+  .news-header {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .news-priority {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .volume-control .label {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .audio-stats {
+    gap: 0.75rem;
+  }
+
+  .stat-row {
+    font-size: 0.85rem;
+    gap: 0.75rem;
+  }
+
+  .stat-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .system-status {
+    padding: 1rem;
+  }
+
+  .status-indicator {
+    font-size: 1rem;
+  }
+
+  .indicator-light {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pip-boy-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .pip-boy-title {
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+  }
+
+  .pip-boy-content {
+    padding: 0.75rem;
+    gap: 0.75rem;
+    height: calc(100vh - 120px);
+  }
+
+  .section-title {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .station-list, .current-station, .controls, .waveform-container {
+    padding: 0.5rem;
+  }
+
+  .news-display {
+    padding: 0.5rem;
+    min-height: 100px;
+  }
+
+  .news-content {
+    font-size: 0.85rem;
+    min-height: 2rem;
+  }
+
+  .pip-boy-button {
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    min-height: 56px;
+  }
+
+  .station-name {
+    font-size: 0.85rem;
+  }
+
+  .station-freq {
+    font-size: 0.75rem;
+  }
+
+  .waveform-display {
+    height: 50px;
+    margin-bottom: 0.5rem;
+  }
+
+  .volume-control .label {
+    font-size: 0.8rem;
+  }
+
+  .pip-boy-button {
+    -webkit-tap-highlight-color: rgba(0, 255, 0, 0.3);
+  }
+
+  .station-row {
+    -webkit-tap-highlight-color: rgba(255, 255, 0, 0.3);
+  }
+
+  .pip-boy-slider {
+    touch-action: none;
+  }
+
+  .news-and-status  {
+      flex-direction: column;
+      align-items: stretch;
+
+    }
+
+  input[type="range"] {
+    font-size: 16px;
   }
 }
 

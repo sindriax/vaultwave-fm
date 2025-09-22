@@ -110,6 +110,11 @@ export default function VaultRadio() {
             audioRef.current.volume = volume / 100;
           }
         }}
+        onLoadedData={() => {
+          if (audioRef.current) {
+            audioRef.current.volume = volume / 100;
+          }
+        }}
       >
         <source src={currentStation.audioUrl} type="audio/mpeg" />
         {currentStation.fallbackUrl && (
