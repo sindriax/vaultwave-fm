@@ -23,10 +23,10 @@ export const radioStations: RadioStation[] = [
     name: "MEGATON CAFE RADIO",
     frequency: "100.9",
     genre: "Swing/Jazz/Blues/Big Band/Oldies",
-    audioUrl: "http://us2.internet-radio.com:8443/;stream",
+    audioUrl: "/api/stream?url=" + encodeURIComponent("http://us2.internet-radio.com:8443/;stream"),
     description:
       "A Blast... From the Past! Playing original recordings from the 1920s to 1950s",
-    fallbackUrl: "http://us2.internet-radio.com:8443/;",
+    fallbackUrl: "/api/stream?url=" + encodeURIComponent("http://us2.internet-radio.com:8443/;"),
   },
   //   {
   //     id: 2,
