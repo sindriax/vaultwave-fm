@@ -9,15 +9,15 @@ export interface RadioStation {
 }
 
 export const radioStations: RadioStation[] = [
-  {
-    id: 8,
-    name: "VAULT-TEC RADIO",
-    frequency: "101.5",
-    genre: "Classical/Orchestral",
-    audioUrl: "https://www.internet-radio.com/station/megatoncafe/",
-    description: "Vault-Tec approved classical music for enhanced productivity",
-    fallbackUrl: "https://www.internet-radio.com/station/megatoncafe/", // Backup stream
-  },
+  // {
+  //   id: 8,
+  //   name: "VAULT-TEC RADIO",
+  //   frequency: "101.5",
+  //   genre: "Classical/Orchestral",
+  //   audioUrl: "https://www.internet-radio.com/station/megatoncafe/",
+  //   description: "Vault-Tec approved classical music for enhanced productivity",
+  //   fallbackUrl: "https://www.internet-radio.com/station/megatoncafe/", // Backup stream
+  // },
   {
     id: 1,
     name: "MEGATON CAFE RADIO",
